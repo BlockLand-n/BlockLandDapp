@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+
+@layer base{
+  body {
+      @apply dark:bg-gray-800 bg-white
+  }
+}
