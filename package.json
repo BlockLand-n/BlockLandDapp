@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stellar/freighter-api": "^2.0.0",
+    "@stellar/stellar-sdk": "^12.1.0",
     "flowbite": "^2.4.1",
     "next": "14.2.4",
     "react": "^18",
