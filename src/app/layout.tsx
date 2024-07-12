@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { DataState } from "./provider";
+import DataProvider from "./provider";
 import { retrievePublicKey,checkConnection } from "./stellar/freighter";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,7 +17,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const {address} =  DataState();
 
   const connect = async () => {
     if (await checkConnection()) {
@@ -76,7 +75,7 @@ export default function RootLayout({
 
         
         
-        {children}
+        <DataProvider>{children}</DataProvider>
 
       </body>
     </html>

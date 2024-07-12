@@ -1,8 +1,19 @@
+"use client";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { DataState } from "./provider";
+import { useEffect } from "react";
 
 
 export default function Home() {
+    const {address} = DataState();
+
+    useEffect(()=>{
+      console.log(address);
+      
+    },[]);
+
+
   return (
     <>
     
