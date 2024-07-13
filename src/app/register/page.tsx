@@ -7,6 +7,7 @@ const Page = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [plant, setPlant] = useState("");
   const [farmSize, setFarmSize] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -26,6 +27,7 @@ const Page = () => {
         name,
         description,
         location,
+        plant,
         farmSize,
         image: `https://gateway.pinata.cloud/ipfs/${fileHash}`,
       };
@@ -87,6 +89,23 @@ const Page = () => {
                       htmlFor="location"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
+                      Crop/Fruit
+                    </label>
+                    <input
+                      type="text"
+                      id="location"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="Ex. "
+                      value={plant}
+                      onChange={(e) => setPlant(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="location"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
                       Location
                     </label>
                     <input
@@ -98,6 +117,8 @@ const Page = () => {
                       onChange={(e) => setLocation(e.target.value)}
                     />
                   </div>
+
+
 
                   <div className="sm:col-span-2">
                     <label
@@ -181,7 +202,7 @@ const Page = () => {
 
                 <button
                   type="submit"
-                  className="mt-4 py-1 w-full px-4 bg-[#4af058] text-black rounded-md"
+                  className="mt-4 py-1 w-full px-4 bg-green-400 text-black rounded-md"
                 >
                   List
                 </button>
