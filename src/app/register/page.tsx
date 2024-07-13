@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import { pinFileToIPFS, pinJSONToIPFS } from "../utils/pinata";
 
 const Page = () => {
   const [name, setName] = useState("");
@@ -10,58 +10,34 @@ const Page = () => {
   const [farmSize, setFarmSize] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
 
-  const apiKey = "54fb9efa.10bd22b0b3cf413e87449d8c475de342";
-  const collectionID = "YOUR_COLLECTION_ID"; // Replace with your actual collection ID
-
-  const pinataSDK = require('@pinata/sdk');
-  const pinata = new pinataSDK('d0a2e4f7271b3ac709ed', '62cb142d5c87a91ab8e11ff6dcb1f6e9703607174c367a0bbec69c84aa4210dc');
-
   const uploadMetadata = async () => {
     if (!name || !description || !uploadedFile || !location || !farmSize) {
       alert("All fields are required");
       return;
     }
 
-    // const metadata = {
-    //   name,
-    //   description,
-    //   location,
-    //   farmSize,
-    //   image: uploadedFile.name, // Assuming the image name will be used
-    // };
-
-    const metadata = {
-      name: 'new custom name',
-      keyvalues: {
-          newKey: 'newValue',
-          existingKey: 'newValue',
-          existingKeyToRemove: null
-      }
-  };
-
-  const res = await pinata.hashMetadata('yourHashHere', metadata)
-  console.log(res)
-  
-
-    const file = new Blob([JSON.stringify(metadata)], { type: "application/json" });
-    const formData = new FormData();
-    formData.append("collectionID", collectionID);
-    formData.append("file", file, "metadata.json");
-
     try {
-      const response = await axios.post(
-        "https://preserve.nft.storage/api/v1/collection/add_tokens",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log("Tokens added", response.data);
+      // Upload the file to Pinata
+      const fileHash = await pinFileToIPFS(uploadedFile);
+      // console.log("File Hash:", fileHash);
+
+      // Create metadata JSON
+      const metadata = {
+        name,
+        description,
+        location,
+        farmSize,
+        image: `https://gateway.pinata.cloud/ipfs/${fileHash}`,
+      };
+
+      // Upload metadata to Pinata
+      const metadataCID = await pinJSONToIPFS(metadata);
+      console.log("Metadata CID:", metadataCID);
+
+
     } catch (error) {
       console.error("Error uploading metadata:", error);
+      alert("There was an error uploading the metadata. Please try again.");
     }
   };
 
@@ -156,7 +132,7 @@ const Page = () => {
                     ></textarea>
                   </div>
 
-                  <div>
+                  <div className="sm:col-span-2">
                     <label
                       htmlFor="upload"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
