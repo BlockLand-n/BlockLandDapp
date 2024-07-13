@@ -50,7 +50,7 @@ export default function RootLayout({
                 className="flex items-center space-x-3 rtl:space-x-reverse"
               >
                 <img
-                  src="./blocklands3.png"
+                  src="/blocklands3.png"
                   className="h-8"
                   alt="Flowbite Logo"
                 />
