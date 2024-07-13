@@ -7,7 +7,7 @@ import { checkConnection, retrievePublicKey } from "./stellar/freighter";
 
 
 export default function Home() {
-    const {address,setAddress,get_all_farms,get_investments,register_farm,add_capital} = DataState();
+    const {address,setAddress,get_all_farms,get_investments,get_farm,register_farm,add_capital} = DataState();
 
   useEffect(()=>{
     connect();
@@ -51,7 +51,7 @@ export default function Home() {
                 <FaArrowRightLong />
 
             </a>  
-            <button onClick={()=>get_all_farms()}>Call</button>
+            <button onClick={()=>get_investments()}>Call</button>
         </div>
     </div>
     </section>
