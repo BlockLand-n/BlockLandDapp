@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "dependencies": 
-    "@stellar/freighter-api": "^2.0.0",
+  "dependencies": {
+    "@stellar/freighter-api" : "^2.0.0",
     "@stellar/stellar-sdk": "^12.1.0",
     "@pinata/sdk": "^2.1.0",
     "axios": "^1.7.2",

@@ -2,14 +2,17 @@
 "use client";
 import React, { useState } from "react";
 import { pinFileToIPFS, pinJSONToIPFS } from "../utils/pinata";
+import { DataState } from "../provider";
 
 const Page = () => {
+  const { register_farm } = DataState();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [plant, setPlant] = useState("");
   const [farmSize, setFarmSize] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
+
 
   const uploadMetadata = async () => {
     if (!name || !description || !uploadedFile || !location || !farmSize) {

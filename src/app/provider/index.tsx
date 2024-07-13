@@ -75,6 +75,7 @@ const DataProvider = ({ children }: PropsWithChildren<{}>) => {
          map.set(Number(f._attributes.key._value._attributes.lo._value),Number(f._attributes.val._value._attributes.lo._value))
       }
       console.log(map);
+      return map;
     }
   };
 
