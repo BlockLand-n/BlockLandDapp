@@ -10,7 +10,7 @@ import { getPublicKey } from '@stellar/freighter-api';
 
 
 let rpcUrl = "https://soroban-testnet.stellar.org";
-let contractAddress = 'CARUN5NY33FF5WYFMA57DW3PUXDEITCPLMZRLA4V24IATZLM2W5DPQFG';
+let contractAddress = 'CDFG23QTZPM4IRP6NAR23FBRAYJ3CC2FMZUNRDEYZPZBGUELRXR5OJFM';
 
 
 
@@ -18,6 +18,12 @@ let params = {
     fee: BASE_FEE,
     networkPassphrase: Networks.TESTNET
 }
+
+
+const typeConverter = (value:String | Number,type: String ) => {
+    return nativeToScVal(value, { type: type })
+}
+
 
 async function contractInt(caller: string, functName: string, values: any) {
     const provider = new SorobanRpc.Server(rpcUrl, { allowHttp: true });
@@ -62,8 +68,4 @@ async function contractInt(caller: string, functName: string, values: any) {
 }
 
 
-
-
-
-
-export { contractInt };
+export { contractInt,typeConverter };

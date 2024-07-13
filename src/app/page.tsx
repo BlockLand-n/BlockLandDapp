@@ -2,16 +2,24 @@
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { DataState } from "./provider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { checkConnection, retrievePublicKey } from "./stellar/freighter";
 
 
 export default function Home() {
-    const {address} = DataState();
+    const {address,setAddress,get_all_farms,get_investments,register_farm,add_capital} = DataState();
 
-    useEffect(()=>{
-      console.log(address);
-      
-    },[]);
+  useEffect(()=>{
+    connect();
+  },[address])
+
+  const connect = async () => {
+    if (await checkConnection()) {
+      let publicKey = await retrievePublicKey();
+      setAddress(publicKey);
+    }
+  };
+
 
 
   return (
@@ -43,6 +51,7 @@ export default function Home() {
                 <FaArrowRightLong />
 
             </a>  
+            <button onClick={()=>get_all_farms()}>Call</button>
         </div>
     </div>
     </section>
