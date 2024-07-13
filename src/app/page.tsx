@@ -1,8 +1,27 @@
+"use client";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { DataState } from "./provider";
+import { useEffect, useState } from "react";
+import { checkConnection, retrievePublicKey } from "./stellar/freighter";
 
 
 export default function Home() {
+    const {address,setAddress,get_all_farms,get_investments,get_farm,register_farm,add_capital} = DataState();
+
+  useEffect(()=>{
+    connect();
+  },[address])
+
+  const connect = async () => {
+    if (await checkConnection()) {
+      let publicKey = await retrievePublicKey();
+      setAddress(publicKey);
+    }
+  };
+
+
+
   return (
     <>
     
@@ -32,6 +51,7 @@ export default function Home() {
                 <FaArrowRightLong />
 
             </a>  
+            <button onClick={()=>get_investments()}>Call</button>
         </div>
     </div>
     </section>
