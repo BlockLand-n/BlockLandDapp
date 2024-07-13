@@ -1,8 +1,44 @@
-import React from "react";
-import { LiaMapMarkerAltSolid } from "react-icons/lia";
+"use client"
+import React, { useEffect, useState } from "react";
+import Farm from "../components/Farm";
+import { contractInt, contractIntNoSign,typeConverter } from "../stellar/contract";
+import { retrievePublicKey } from "../stellar/freighter";
 
 
 const page = () => {
+  const [farms,setFarms] = useState();
+
+  useEffect(()=>{
+    get_all_farms()
+  },[])
+
+  const get_all_farms = async () => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "get_all_farms", null);
+
+      const farmsArray: any[] = [];
+
+      for (let farm of result._value) {
+        const farmObject: any = {};
+        for (let f of farm._value) {
+          const key = f._attributes.key._value.toString();
+          if (Object.keys(f._attributes.val._value)[0] === "_attributes") {
+            farmObject[key] = Number(f._attributes.val._value._attributes.lo._value);
+          } else {
+            farmObject[key] = f._attributes.val._value.toString();
+          }
+        }
+        farmsArray.push(farmObject);
+      }
+      console.log(farmsArray);
+      return farmsArray;
+      
+    }
+  };
+
+
+ 
   return (
     <>
       <div className="bg-[#191C24] min-h-screen">
@@ -10,35 +46,9 @@ const page = () => {
           <h2 className="text-white text-4xl tracking-tight font-bold mb-6">
             Farms
           </h2>
+          <button onClick={get_all_farms}>Call</button>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-            <div className="w-[19rem] mx-auto bg-[#191C24] rounded-xl overflow-hidden shadow-md border-2 border-gray-700">
-              <a href="#">
-              <img
-                className="w-full h-48 object-cover"
-                src="./farm.jpg"
-                alt="Farm image"
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-300">
-                  Fountain Creek Farm
-                </h3>
-                <div>
-                  <p className="text-gray-400 mt-1 text-sm flex items-center"> <LiaMapMarkerAltSolid />
- Vermilion County, IL</p>
-                </div>
-                <div className="mt-6 text-gray-300">
-                  <div className="grid grid-cols-2 text-sm gap-2">
-                    <span>Realized IRR</span>
-                    <span className="font-bold text-right">17%</span>
-                    <span>Actual Hold Period</span>
-                    <span className="font-bold text-right">3.1 Years</span>
-                    <span>Target Hold Period</span>
-                    <span className="font-bold text-right">5-10 Years</span>
-                  </div>
-                </div>
-              </div>
-              </a>
-            </div>
+            <Farm/>
 
           </div>
         </div>

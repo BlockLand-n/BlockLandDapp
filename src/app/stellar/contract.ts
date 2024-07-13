@@ -67,5 +67,55 @@ async function contractInt(caller: string, functName: string, values: any) {
     }
 }
 
+async function contractIntNoSign(caller: string, functName: string, values: any) {
+    const provider = new SorobanRpc.Server(rpcUrl, { allowHttp: true });
+    const contract = new Contract(contractAddress);
+    const sourceAccount = await provider.getAccount(caller);
 
-export { contractInt,typeConverter };
+    let buildTx;
+    if (values == null) {
+        buildTx = new TransactionBuilder(sourceAccount, params)
+            .addOperation(contract.call(functName))
+            .setTimeout(30).build();
+    } else {
+        buildTx = new TransactionBuilder(sourceAccount, params)
+            .addOperation(contract.call(functName, ...values))
+            .setTimeout(30).build();
+    }
+
+    // Prepare the transaction without signing
+    let _buildTx = await provider.prepareTransaction(buildTx);
+    let prepareTx = _buildTx.toXDR();
+
+    // No signing step
+    let tx = TransactionBuilder.fromXDR(prepareTx, Networks.TESTNET);
+
+    try {
+        let sendTx = await provider.sendTransaction(tx).catch(function (err) {
+            return err;
+        });
+
+        if (sendTx.errorResult) {
+            throw new Error("Unable to submit transaction");
+        }
+
+        if (sendTx.status === "PENDING") {
+            let txResponse = await provider.getTransaction(sendTx.hash);
+            while (txResponse.status === "NOT_FOUND") {
+                txResponse = await provider.getTransaction(sendTx.hash);
+                await new Promise((resolve) => setTimeout(resolve, 100));
+            }
+
+            if (txResponse.status === "SUCCESS") {
+                let result = txResponse.returnValue;
+                return result;
+            }
+        }
+    } catch (err) {
+        return err;
+    }
+}
+
+
+
+export { contractInt,typeConverter,contractIntNoSign };
