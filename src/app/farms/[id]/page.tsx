@@ -4,6 +4,7 @@ import React, { useEffect,useState } from "react";
 
 import { contractInt,typeConverter } from "@/app/stellar/contract";
 import { retrievePublicKey } from "@/app/stellar/freighter";
+import toast from "react-hot-toast";
 
 const page = ({ params }) => {
   const id = params.id;
@@ -50,6 +51,7 @@ const page = ({ params }) => {
         typeConverter(amount, "i128"),
         asset,
       ]);
+      toast.success("Thanks for your investments");
       console.log(result);
     }
   };

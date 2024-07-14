@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { pinFileToIPFS, pinJSONToIPFS } from "../utils/pinata";
   import { contractInt,typeConverter } from "../stellar/contract";
   import { retrievePublicKey } from "../stellar/freighter";
+  import toast from "react-hot-toast";
 
 const Page = () => {
   const [name, setName] = useState("");
@@ -59,6 +60,7 @@ const Page = () => {
       // Upload metadata to Pinata
       const metadataCID = await pinJSONToIPFS(metadata);
       register_farm(metadataCID,parseInt(capitalRequired),parseInt(profits));
+      toast.success("Farm Successfully Added");
       console.log("Metadata CID:", metadataCID);
     } catch (error) {
       console.error("Error uploading metadata:", error);

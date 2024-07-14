@@ -4,6 +4,7 @@ import React, { useState,useEffect } from "react";
 import { CiSquarePlus } from "react-icons/ci";
 import { retrievePublicKey } from "@/app/stellar/freighter";
 import { typeConverter,contractInt } from "@/app/stellar/contract";
+import toast from "react-hot-toast";
 
 const page = () => {
   const [profit,setProfit] = useState("");
@@ -22,6 +23,7 @@ const page = () => {
         asset,
       ]);
       console.log(result);
+      toast.success("Profit distributed among investors");
     }
   };
 
