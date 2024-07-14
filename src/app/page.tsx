@@ -5,7 +5,6 @@ import { DataState } from "./provider";
 import { useEffect, useState } from "react";
 import { checkConnection, retrievePublicKey } from "./stellar/freighter";
 import Link from "next/link";
-import toast from "react-hot-toast";
 
 
 export default function Home() {
