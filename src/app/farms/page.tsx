@@ -1,16 +1,20 @@
-"use client"
+// @ts-nocheck 
+"use client";
 import React, { useEffect, useState } from "react";
 import Farm from "../components/Farm";
-import { contractInt, contractIntNoSign,typeConverter } from "../stellar/contract";
-import { retrievePublicKey } from "../stellar/freighter";
-
+  import {
+    contractInt,
+    contractIntNoSign,
+    typeConverter,
+  } from "../stellar/contract";
+  import { retrievePublicKey } from "../stellar/freighter";
 
 const page = () => {
-  const [farms,setFarms] = useState();
+  const [farms, setFarms] = useState();
 
-  useEffect(()=>{
-    get_all_farms()
-  },[])
+  useEffect(() => {
+    get_all_farms();
+  }, []);
 
   const get_all_farms = async () => {
     const address = await retrievePublicKey();
@@ -24,7 +28,9 @@ const page = () => {
         for (let f of farm._value) {
           const key = f._attributes.key._value.toString();
           if (Object.keys(f._attributes.val._value)[0] === "_attributes") {
-            farmObject[key] = Number(f._attributes.val._value._attributes.lo._value);
+            farmObject[key] = Number(
+              f._attributes.val._value._attributes.lo._value
+            );
           } else {
             farmObject[key] = f._attributes.val._value.toString();
           }
@@ -32,13 +38,11 @@ const page = () => {
         farmsArray.push(farmObject);
       }
       console.log(farmsArray);
+      setFarms(farmsArray);
       return farmsArray;
-      
     }
   };
 
-
- 
   return (
     <>
       <div className="bg-[#191C24] min-h-screen">
@@ -46,10 +50,10 @@ const page = () => {
           <h2 className="text-white text-4xl tracking-tight font-bold mb-6">
             Farms
           </h2>
-          <button onClick={get_all_farms}>Call</button>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-            <Farm/>
-
+            {farms !== undefined &&  farms?.map((farm,index) => (
+              <Farm key={index} farm={farm} />
+            ))}
           </div>
         </div>
       </div>

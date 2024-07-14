@@ -1,11 +1,12 @@
+// @ts-nocheck 
+import Link from "next/link";
 import React from "react";
 import { LiaMapMarkerAltSolid } from "react-icons/lia";
 
-
-const Farm = () => {
+const Farm = ({ farm }) => {
   return (
     <div className="w-[19rem] mx-auto bg-[#191C24] rounded-xl overflow-hidden shadow-md border-2 border-gray-700">
-      <a href="#">
+      <Link href={`/farms/${farm.id}`}>
         <img
           className="w-full h-48 object-cover"
           src="./farm.jpg"
@@ -24,16 +25,16 @@ const Farm = () => {
           </div>
           <div className="mt-6 text-gray-300">
             <div className="grid grid-cols-2 text-sm gap-2">
-              <span>Realized IRR</span>
-              <span className="font-bold text-right">17%</span>
-              <span>Actual Hold Period</span>
-              <span className="font-bold text-right">3.1 Years</span>
-              <span>Target Hold Period</span>
-              <span className="font-bold text-right">5-10 Years</span>
+              <span>Capital Required</span>
+              <span className="font-bold text-right">{farm.cap_req}</span>
+              <span>Capital Raised</span>
+              <span className="font-bold text-right">{farm.cap_rai}</span>
+              <span>Expected Profit</span>
+              <span className="font-bold text-right">{farm.exp_pft}</span>
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };
