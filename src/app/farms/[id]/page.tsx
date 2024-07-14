@@ -1,11 +1,46 @@
-import React from 'react'
+// @ts-nocheck
+"use client";
+import React, { useEffect,useState } from "react";
 
-const page = () => {
+import { contractInt,typeConverter } from "@/app/stellar/contract";
+import { retrievePublicKey } from "@/app/stellar/freighter";
+
+const page = ({ params }) => {
+  const id = params.id;
+  const [farm,setFarm] = useState();
+
+  useEffect(() => {
+    get_farm();
+  }, []);
+
+
+  const get_farm = async (id: Number) => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "get_farm", [
+        typeConverter(id, "u128"),
+      ]);
+      const farm: any[] = [];
+      for (let f of result._value) {
+        const key = f._attributes.key._value.toString();
+        if (Object.keys(f._attributes.val._value)[0] === "_attributes") {
+          farm[key] = Number(f._attributes.val._value._attributes.lo._value);
+        } else {
+          farm[key] = f._attributes.val._value.toString();
+        }
+      }
+      console.log(farm);
+      
+      setFarm(farm);
+      return farm;
+    }
+  };
+
   return (
     <>
-    
-    <section className="py-8 bg-white md:py-16 dark:bg-[#191C24] antialiased min-h-screen flex items-center">
+      <section className="py-8 bg-white md:py-16 dark:bg-[#191C24] antialiased min-h-screen flex items-center">
         <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
+
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
             <div className="shrink-0 max-w-2xl mx-auto">
             <img className="w-[60rem] dark:block" src="/farm2.jpg" alt="Farm Image" />
@@ -53,15 +88,18 @@ const page = () => {
             >
                 Invest
             </button>
-            </div>
 
             </div>
+          </div>
         </div>
-        </div>
+
   </section>
 
+
     </>
-  )
-}
+  );
+};
+
 
 export default page
+

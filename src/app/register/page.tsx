@@ -2,10 +2,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { pinFileToIPFS, pinJSONToIPFS } from "../utils/pinata";
-import { DataState } from "../provider";
+import { contractInt,typeConverter } from "../stellar/contract";
+import { retrievePublicKey } from "../stellar/freighter";
 
 const Page = () => {
-  const { register_farm } = DataState();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -16,6 +16,23 @@ const Page = () => {
   const [expectedDate, setExpectedDate] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showUploadField, setShowUploadField] = useState(true);
+
+
+  const register_farm = async (
+    meta: String,
+    cap_req: Number,
+    exp_pft: Number
+  ) => {
+    const address =  await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "register_farm", [
+        typeConverter(meta, "string"),
+        typeConverter(cap_req, "u128"),
+        typeConverter(exp_pft, "u128"),
+      ]);
+      console.log(result);
+    }
+  };
 
   const uploadMetadata = async () => {
     if (!name || !description || !uploadedFiles.length || !location || !farmSize) {
@@ -41,6 +58,7 @@ const Page = () => {
   
       // Upload metadata to Pinata
       const metadataCID = await pinJSONToIPFS(metadata);
+      register_farm(metadataCID,parseInt(capitalRequired),parseInt(profits));
       console.log("Metadata CID:", metadataCID);
     } catch (error) {
       console.error("Error uploading metadata:", error);
