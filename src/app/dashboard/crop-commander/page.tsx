@@ -1,7 +1,64 @@
-import React from "react";
-import { CiSquarePlus } from "react-icons/ci";
+// @ts-nocheck
+"use client";
+import React, { useState,useEffect } from "react";
+import { CiSquarePlus } from "react-icons/ci";+
+import { retrievePublicKey } from "@/app/stellar/freighter";
+import { typeConverter,contractInt } from "@/app/stellar/contract";
 
 const page = () => {
+  const [profit,setProfit] = useState("");
+  const [farms, setFarms] = useState();
+  const asset = typeConverter(
+    "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    "address"
+  );
+
+  const distribute_profit = async (farm_id: Number, profit: Number) => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "distribute_profit", [
+        typeConverter(farm_id, "u128"),
+        typeConverter(profit, "u128"),
+        asset,
+      ]);
+      console.log(result);
+    }
+  };
+
+
+
+  useEffect(() => {
+    get_all_farms();
+  }, []);
+
+  const get_all_farms = async () => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "get_all_farms", null);
+
+      const farmsArray: any[] = [];
+
+      for (let farm of result._value) {
+        const farmObject: any = {};
+        for (let f of farm._value) {
+          const key = f._attributes.key._value.toString();
+          if (Object.keys(f._attributes.val._value)[0] === "_attributes") {
+            farmObject[key] = Number(
+              f._attributes.val._value._attributes.lo._value
+            );
+          } else {
+            farmObject[key] = f._attributes.val._value.toString();
+          }
+        }
+        farmsArray.push(farmObject);
+      }
+      console.log(farmsArray);
+      setFarms(farmsArray);
+      return farmsArray;
+    }
+  };
+
+
   return (
     <>
       <div className="dark:bg-[#191C24] w-full min-h-screen">
@@ -61,11 +118,14 @@ const page = () => {
                 id="amount"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Amount In USDC"
+                value={profit}
+                onChange={(e)=>setProfit(e.target.value)}
             />
 
             <button
                 type="submit"
                 className="py-2 w-full px-4 bg-green-400 text-black rounded-md mt-2 sm:mt-0"
+                onClick={()=>distribute_profit(1,parseInt(profit))}
             >
                 Add Profit
             </button>
