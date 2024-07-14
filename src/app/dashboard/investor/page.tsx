@@ -1,7 +1,68 @@
-import React from "react";
+// @ts-nocheck
+"use client"
+import React, { useEffect, useState } from "react";
 import { CiSquarePlus } from "react-icons/ci";
+import { retrievePublicKey } from "@/app/stellar/freighter";
+import { contractInt, typeConverter } from "@/app/stellar/contract";
 
 const page = () => {
+  const [invests, setInvest] = useState();
+
+  useEffect(() => {
+    get_investments();
+  }, []);
+
+  const get_investments = async () => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "get_investments", [
+        typeConverter(address.toString(), "address"),
+      ]);
+      const map = new Map();
+      for (let f of result._value) {
+        map.set(
+          Number(f._attributes.key._value._attributes.lo._value),
+          Number(f._attributes.val._value._attributes.lo._value)
+        );
+      }
+      console.log(map);
+      setInvest(map);
+
+      const invests = [];
+
+      for (let [key, value] of map.entries()) {
+        const farm = await get_farm(key);
+        invests.push({ key, value, farm });
+      }
+
+      console.log(invests);
+      setInvest(invests);
+      return invests;
+    }
+  };
+
+  const get_farm = async (id: Number) => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "get_farm", [
+        typeConverter(id, "u128"),
+      ]);
+      const farm: any[] = [];
+      for (let f of result._value) {
+        const key = f._attributes.key._value.toString();
+        if (Object.keys(f._attributes.val._value)[0] === "_attributes") {
+          farm[key] = Number(f._attributes.val._value._attributes.lo._value);
+        } else {
+          farm[key] = f._attributes.val._value.toString();
+        }
+      }
+      console.log(farm);
+
+      setFarm(farm);
+      return farm;
+    }
+  };
+
   return (
     <>
       <div className="dark:bg-[#191C24] w-full min-h-screen">
@@ -30,31 +91,44 @@ const page = () => {
             </div>
 
             <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden mt-6">
-
-            <div className="overflow-x-auto">
+              <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" className="px-4 py-3">Farm</th>
-                            <th scope="col" className="px-4 py-3">Crop</th>
-                            <th scope="col" className="px-4 py-3">Invested</th>
-                            <th scope="col" className="px-4 py-3">P&L</th>
-                            <th scope="col" className="px-4 py-3">Status</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="border-b dark:border-gray-700">
-                            <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">Sugar Cane Farm</th>
-                            <td className="px-4 py-3">sugarcane</td>
-                            <td className="px-4 py-3">Apple</td>
-                            <td className="px-4 py-3">300</td>
-                            <td className="px-4 py-3">$2999</td>
-                        </tr>
-                    </tbody>
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="px-4 py-3">
+                        Farm
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        Crop
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        Invested
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        P&L
+                      </th>
+                      <th scope="col" className="px-4 py-3">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b dark:border-gray-700">
+                      <th
+                        scope="row"
+                        className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        Sugar Cane Farm
+                      </th>
+                      <td className="px-4 py-3">sugarcane</td>
+                      <td className="px-4 py-3">Apple</td>
+                      <td className="px-4 py-3">300</td>
+                      <td className="px-4 py-3">$2999</td>
+                    </tr>
+                  </tbody>
                 </table>
-            </div>
-            {/* <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+              </div>
+              {/* <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
                 <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                     Showing
                     <span className="font-semibold text-gray-900 dark:text-white">1-10</span>
@@ -95,11 +169,8 @@ const page = () => {
                     </li>
                 </ul>
             </nav> */}
-        </div>
+            </div>
           </div>
-
-
-
         </section>
       </div>
     </>

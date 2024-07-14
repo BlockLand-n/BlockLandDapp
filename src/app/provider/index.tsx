@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { PropsWithChildren, ReactNode, useState } from "react";
 import { useContext } from "react";
 import { DataContext } from "../context";
