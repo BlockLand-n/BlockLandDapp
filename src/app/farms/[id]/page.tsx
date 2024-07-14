@@ -8,9 +8,14 @@ import { retrievePublicKey } from "@/app/stellar/freighter";
 const page = ({ params }) => {
   const id = params.id;
   const [farm,setFarm] = useState();
+  const [usdc,setUsdc] = useState("");
+  const asset = typeConverter(
+    "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    "address"
+  );
 
   useEffect(() => {
-    get_farm();
+    get_farm(id);
   }, []);
 
 
@@ -36,9 +41,26 @@ const page = ({ params }) => {
     }
   };
 
+  const add_capital = async (farm_id: Number, amount: Number) => {
+    const address = await retrievePublicKey();
+    if (address !== undefined) {
+      let result: any = await contractInt(address, "add_capital", [
+        typeConverter(farm_id, "u128"),
+        typeConverter(address.toString(), "address"),
+        typeConverter(amount, "i128"),
+        asset,
+      ]);
+      console.log(result);
+    }
+  };
+
+  const invest = async() => {
+    await add_capital(id,parseInt(usdc));
+  }
+
   return (
     <>
-      <section className="py-8 bg-white md:py-16 dark:bg-[#191C24] antialiased min-h-screen flex items-center">
+    {farm &&  <section className="py-8 bg-white md:py-16 dark:bg-[#191C24] antialiased min-h-screen flex items-center">
         <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
@@ -67,8 +89,8 @@ const page = ({ params }) => {
             </div>
 
             <div className="mt-6">
-                <p className="text-gray-900 dark:text-white"><strong>Capital Required:</strong> $500,000</p>
-                <p className="text-gray-900 dark:text-white"><strong>Capital Raised:</strong> $250,000</p>
+                <p className="text-gray-900 dark:text-white"><strong>Capital Required:</strong> {farm.cap_req}</p>
+                <p className="text-gray-900 dark:text-white"><strong>Capital Raised:</strong> {farm.cap_rai}</p>
                 <p className="text-gray-900 dark:text-white"><strong>Total Duration:</strong> 18 months</p>
             </div>
 
@@ -80,11 +102,14 @@ const page = ({ params }) => {
                 id="amount"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Amount In USDC"
+                value={usdc}
+                onChange={(e)=> setUsdc(e.target.value)}
             />
 
             <button
                 type="submit"
                 className="py-2 w-full px-4 bg-green-400 text-black rounded-md mt-2 sm:mt-0"
+                onClick={invest}
             >
                 Invest
             </button>
@@ -93,7 +118,9 @@ const page = ({ params }) => {
           </div>
         </div>
 
-  </section>
+        </div>
+
+  </section>}
 
 
     </>
@@ -101,5 +128,5 @@ const page = ({ params }) => {
 };
 
 
-export default page
+export default page;
 
