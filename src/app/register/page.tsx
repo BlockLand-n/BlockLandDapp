@@ -2,8 +2,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { pinFileToIPFS, pinJSONToIPFS } from "../utils/pinata";
-import { contractInt,typeConverter } from "../stellar/contract";
-import { retrievePublicKey } from "../stellar/freighter";
+  import { contractInt,typeConverter } from "../stellar/contract";
+  import { retrievePublicKey } from "../stellar/freighter";
 
 const Page = () => {
   const [name, setName] = useState("");
