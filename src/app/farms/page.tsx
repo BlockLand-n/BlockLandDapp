@@ -8,6 +8,7 @@ import Farm from "../components/Farm";
     typeConverter,
   } from "../stellar/contract";
   import { retrievePublicKey } from "../stellar/freighter";
+  import axios from "axios";
 
 const page = () => {
   const [farms, setFarms] = useState();
@@ -37,7 +38,26 @@ const page = () => {
         }
         farmsArray.push(farmObject);
       }
+
       console.log(farmsArray);
+
+      const farmsWithMetadata = await Promise.all(
+        farmsArray.map(async (farm) => {
+          if (farm.metadata) {
+            const metadataUrl = `https://azure-advisory-camel-563.mypinata.cloud/ipfs/${farm.metadata}`;
+            try {
+              const response = await axios.get(metadataUrl);
+              farm.metadataContents = response.data;
+            } catch (error) {
+              console.error("Error fetching metadata:", error);
+            }
+          }
+          return farm;
+        })
+      );
+
+      console.log(farmsWithMetadata);
+      console.log("asdasdd")
       setFarms(farmsArray);
       return farmsArray;
     }
