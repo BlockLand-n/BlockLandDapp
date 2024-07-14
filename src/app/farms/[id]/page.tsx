@@ -25,7 +25,7 @@ const page = () => {
             </p>
 
             <div className="mt-4 sm:items-center sm:gap-4 sm:flex">
-                <p className="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
+                <p className="text-xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
                 <span className='text-md'>Total Expected Profits: </span> <span className='text-[#4af058]'> $1,249.99 </span>
                 </p>
 
