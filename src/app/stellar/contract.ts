@@ -10,7 +10,7 @@ import { getPublicKey } from '@stellar/freighter-api';
 
 
 let rpcUrl = "https://soroban-testnet.stellar.org";
-let contractAddress = 'CDFG23QTZPM4IRP6NAR23FBRAYJ3CC2FMZUNRDEYZPZBGUELRXR5OJFM';
+let contractAddress = 'CD5QGTZWEZH5A2YNPI2DAYSLLPVW2MPQYMSGMPMXPVQZ627GHQ6DMAXO';
 
 
 

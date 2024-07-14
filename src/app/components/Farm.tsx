@@ -1,9 +1,12 @@
 // @ts-nocheck 
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { LiaMapMarkerAltSolid } from "react-icons/lia";
 
 const Farm = ({ farm }) => {
+  useEffect(() => {
+    console.log(farm)
+  }, [])
   return (
     <div className="w-[19rem] mx-auto bg-[#191C24] rounded-xl overflow-hidden shadow-md border-2 border-gray-700">
       <Link href={`/farms/${farm.id}`}>
