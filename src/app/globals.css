@@ -38,3 +38,7 @@ body {
       @apply dark:bg-gray-800 bg-white
   }
 }
+
+.primary-btn-bg {
+  background: #4af058;
+}

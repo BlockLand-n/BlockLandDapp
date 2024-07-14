@@ -15,6 +15,7 @@ export default function Home() {
   }, [address]);
 
   const connect = async () => {
+    
     if (await checkConnection()) {
       let publicKey = await retrievePublicKey();
       setAddress(publicKey);
