@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 import React, { useState,useEffect } from "react";
-import { CiSquarePlus } from "react-icons/ci";+
+import { CiSquarePlus } from "react-icons/ci";
 import { retrievePublicKey } from "@/app/stellar/freighter";
 import { typeConverter,contractInt } from "@/app/stellar/contract";
 
