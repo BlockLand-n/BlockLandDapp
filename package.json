@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@stellar/freighter-api" : "^2.0.0",
-    "@stellar/stellar-sdk": "^12.1.0",
     "@pinata/sdk": "^2.1.0",
+    "@stellar/freighter-api": "^2.0.0",
+    "@stellar/stellar-sdk": "^12.1.0",
     "axios": "^1.7.2",
     "flowbite": "^2.4.1",
     "fs": "^0.0.1-security",
@@ -19,6 +19,7 @@
     "nft.storage": "^7.2.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^5.2.1"
   },
   "devDependencies": {
@@ -30,8 +31,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }, 
-
+  },
   "browser": {
     "fs": false,
     "os": false,

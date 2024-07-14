@@ -6,6 +6,8 @@ import DataProvider, { DataState } from "./provider";
 import { retrievePublicKey, checkConnection } from "./stellar/freighter";
 import { SetStateAction, useEffect, useState } from "react";
 import React from "react";
+import { Toaster } from 'react-hot-toast';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +45,16 @@ export default function RootLayout({
       </head>
       <DataProvider>
         <body className="dark">
+          <Toaster position="bottom-center"
+                   reverseOrder={false}
+                   toastOptions={{
+                    duration: 5000,
+                    style: {
+                      background: '#363636',
+                      color: '#fff',
+                    },
+                  }}
+                   />
           <nav className="bg-[#191C24] border-gray-200 border-b border-green-600">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
               <a
