@@ -37,39 +37,19 @@ const page = () => {
                         <tr>
                             <th scope="col" className="px-4 py-3">Farm</th>
                             <th scope="col" className="px-4 py-3">Crop</th>
-                            <th scope="col" className="px-4 py-3">Capital Raised</th>
-                            <th scope="col" className="px-4 py-3">Profits</th>
+                            <th scope="col" className="px-4 py-3">Invested</th>
+                            <th scope="col" className="px-4 py-3">P&L</th>
                             <th scope="col" className="px-4 py-3">Status</th>
-                            <th scope="col" className="px-4 py-3">Add Profit</th>
                             
                         </tr>
                     </thead>
                     <tbody>
                         <tr className="border-b dark:border-gray-700">
-                            <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                            >
-                                <img className="w-[8rem]" src="/farm2.jpg" alt="" />
-                                
-                            </th>
+                            <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">Sugar Cane Farm</th>
                             <td className="px-4 py-3">sugarcane</td>
                             <td className="px-4 py-3">Apple</td>
                             <td className="px-4 py-3">300</td>
                             <td className="px-4 py-3">$2999</td>
-                            <td className="flex gap-2 px-4 py-3">
-                            <input
-                type="text"
-                id="amount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Amount In USDC"
-            />
-
-            <button
-                type="submit"
-                className="py-2 w-full px-4 bg-green-400 text-black rounded-md mt-2 sm:mt-0"
-            >
-                Add Profit
-            </button>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
